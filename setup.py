@@ -1,4 +1,4 @@
-from distutils.core import setup
+from setuptools import setup
 import os.path
 
 with open(os.path.join(os.path.dirname(__file__), "README.rst")) as f:
@@ -14,6 +14,7 @@ setup(name = 'vtk_visualizer',
       description = "Easy 3D visualization of point clouds and geometric primitives",  
       long_description = long_description,
       packages = ['vtk_visualizer'],
+      install_requires = ['python_qt_binding', 'vtk'],
       license = 'BSD',
       platforms = 'any',
       classifiers=[
