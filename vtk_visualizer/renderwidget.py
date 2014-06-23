@@ -7,13 +7,24 @@ Render widget for VTK based on Qt
 
 import vtk
 
+qt_api = 'pyqt'
+try:
+    from PyQt4 import QtGui, QtCore
+except:
+    qt_api = 'pyside'
+
+if qt_api == 'pyside':
+    try:
+        from PySide import QtGui
+    except:
+        raise Exception('Need either PySide or PyQt4')
+        
 # from vtk.qt4.QVTKRenderWindowInteractor import QVTKRenderWindowInteractor 
 # Note: The QVTKRenderWindowInteractor included with VTK is buggy for PySide
 # Use our modified version instead
 from QVTKRenderWindowInteractor import QVTKRenderWindowInteractor 
 
 import sys
-from python_qt_binding import QtGui
 
 class RenderWidget:
     
@@ -48,9 +59,6 @@ class RenderWidget:
     def exec_(self):
         self.app.exec_()
                 
-    def __del__(self):
-        self.widget.close()
-
 if __name__ == '__main__':    
     
     cone = vtk.vtkConeSource()

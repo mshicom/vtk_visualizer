@@ -34,13 +34,21 @@ Changes by O. Skotheim, Mar. 2014
 import sys
 import os
 
-from python_qt_binding import QtGui, QtCore, QT_BINDING
-qt_api = QT_BINDING
+qt_api = 'pyqt'
+
+try:
+    from PyQt4 import QtGui, QtCore
+except:
+    qt_api = 'pyside'
 
 if qt_api == 'pyside':
-    from ctypes import pythonapi, c_void_p, py_object
-    pythonapi.PyCObject_AsVoidPtr.restype = c_void_p
-    pythonapi.PyCObject_AsVoidPtr.argtypes = [ py_object ]
+    try:
+        from PySide import QtGui, QtCore
+        from ctypes import pythonapi, c_void_p, py_object
+        pythonapi.PyCObject_AsVoidPtr.restype = c_void_p
+        pythonapi.PyCObject_AsVoidPtr.argtypes = [ py_object ]
+    except:
+        raise Exception('Need either PySide or PyQt4')
 
 import vtk
 
