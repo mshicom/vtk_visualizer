@@ -1,12 +1,11 @@
 # -*- coding: utf-8 -*-
 """
-VTK Visualizer Control
-
 Easy visualization of point clouds and geometric primitives
-
 Created on Fri Apr 08 12:01:56 2011
 
-@author: Øystein Skotheim, SINTEF ICT <oystein.skotheim@sintef.no>
+.. Author: Øystein Skotheim, SINTEF ICT <oystein.skotheim@sintef.no>
+   Date:   Thu Sep 12 15:50:40 2013
+
 """
 
 import vtk
@@ -14,6 +13,7 @@ from renderwidget import RenderWidget
 from pointobject import *
                 
 class VTKVisualizerControl:
+    "Class for easy visualization of point clouds and geometric primitives"
     
     def __init__(self):
         "Create a wiget with a VTK Visualizer Control in it"

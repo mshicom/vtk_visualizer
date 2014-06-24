@@ -2,7 +2,7 @@
 """
 Render widget for VTK based on Qt
 
-@author: Øystein Skotheim, SINTEF ICT <oystein.skotheim@sintef.no>
+:Author: Øystein Skotheim, SINTEF ICT <oystein.skotheim@sintef.no>
 """
 
 import vtk

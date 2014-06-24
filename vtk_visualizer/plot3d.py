@@ -1,25 +1,24 @@
 # -*- coding: utf-8 -*-
 """
-
 Helper functions for easy visualization of point clouds
 
-Created on Thu Sep 12 15:50:40 2013
-
-@author: Øystein Skotheim, SINTEF ICT <oystein.skotheim@sintef.no>
+.. Author: Øystein Skotheim, SINTEF ICT <oystein.skotheim@sintef.no>
+   Date:   Thu Sep 12 15:50:40 2013
 """
 
 import visualizercontrol as vis
 
-g_vtkControl = None
+g_vtk_control = None
 g_hold = False
 
-def getVtkControl():
-    global g_vtkControl
+def get_vtk_control():
+    "Get the vtk control currently used by the plot3d functions"
+    global g_vtk_control
     
-    if g_vtkControl is None:
-        g_vtkControl = vis.VTKVisualizerControl()    
+    if g_vtk_control is None:
+        g_vtk_control = vis.VTKVisualizerControl()    
         
-    return g_vtkControl
+    return g_vtk_control
 
 def vtkhold(flag=True):
     "Toggle whether new objects will replace previous objects in the visualizer"
@@ -27,6 +26,7 @@ def vtkhold(flag=True):
     g_hold = flag
     
 def is_hold_enabled():
+    "Returns whether hold is enabled"
     global g_hold
     return g_hold
     
@@ -35,7 +35,7 @@ def plotxyz(pts):
     
     The supplied array may have an additional column with scalars, which
     will be used to color the points (0=black, 1=white)"""
-    vtkControl = getVtkControl()    
+    vtkControl = get_vtk_control()    
     if not is_hold_enabled():
         vtkControl.RemoveAllActors()
     vtkControl.AddPointCloudActor(pts)    
@@ -43,7 +43,7 @@ def plotxyz(pts):
 
 def plotxyzrgb(pts):
     "Plot a supplied point cloud w/ color (NumPy array of Nx6 values)"
-    vtkControl = getVtkControl()    
+    vtkControl = get_vtk_control()    
     if not is_hold_enabled():
         vtkControl.RemoveAllActors()
     vtkControl.AddColoredPointCloudActor(pts)    
@@ -51,7 +51,7 @@ def plotxyzrgb(pts):
 
 def plothh(pts,scale=5.0):
     "Plot hedge hog (points w/ normals) from given NumPy array of Nx6 values"
-    vtkControl = getVtkControl()    
+    vtkControl = get_vtk_control()    
     if not is_hold_enabled():
         vtkControl.RemoveAllActors()    
     vtkControl.AddHedgeHogActor(pts,scale)
