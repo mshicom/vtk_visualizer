@@ -15,12 +15,13 @@ from pointobject import *
 class VTKVisualizerControl:
     "Class for easy visualization of point clouds and geometric primitives"
     
-    def __init__(self):
+    def __init__(self, parent=None):
         "Create a wiget with a VTK Visualizer Control in it"
         self.pointObjects = []
         self.renderer = vtk.vtkRenderer()
-        self.renderWidget = RenderWidget(self.renderer)
+        self.renderWidget = RenderWidget(self.renderer, parent)
         self.renderWindow = self.renderWidget.renderWindow
+        self.widget = self.renderWidget.widget
         
     def __del__(self):
         del self.renderWidget
