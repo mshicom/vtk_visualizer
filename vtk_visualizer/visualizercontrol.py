@@ -262,7 +262,14 @@ class VTKVisualizerControl:
         obj.CreateBox(bounds)
         self.pointObjects.append(obj)
         self.renderer.AddActor(obj.GetActor())
-
+        
+    def AddLine(self,p1,p2):
+        "Add a 3D line from p1=[x1,y1,z1] to p2=[x2,y2,z2]"
+        obj = VTKObject()
+        obj.CreateLine(p1,p2)
+        self.pointObjects.append(obj)
+        self.renderer.AddActor(obj.GetActor())
+        
     # Helper functions    
     def _array2vtkTransform(self,arr):
         T = vtk.vtkTransform()

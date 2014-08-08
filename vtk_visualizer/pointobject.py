@@ -312,11 +312,23 @@ class VTKObject:
         self.SetupPipelineMesh()
         
     def CreateBox(self, bounds):
-        "Create a box witih the given bounds [xmin,xmax,ymin,ymax,zmin,zmax]"
+        "Create a box with the given bounds [xmin,xmax,ymin,ymax,zmin,zmax]"
         box = vtk.vtkTessellatedBoxSource()
         box.SetBounds(bounds)
         box.Update()
         self.pd = box.GetOutput()
+        self.scalars = None
+        self.SetupPipelineMesh()
+        
+    def CreateLine(self, p1, p2):
+        "Create a 3D line from p1=[x1,y1,z1] to p2=[x2,y2,z2]"
+        line = vtk.vtkLineSource()
+        line.SetPoint1(*p1)
+        line.SetPoint2(*p2)
+        line.Update()
+        
+        self.pd = vtk.vtkPolyData()
+        self.pd.DeepCopy(line.GetOutput())
         self.scalars = None
         self.SetupPipelineMesh()
         
