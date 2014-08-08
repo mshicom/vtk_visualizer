@@ -28,7 +28,7 @@ import sys
 
 class RenderWidget:
     
-    def __init__(self,renderer=None):
+    def __init__(self,renderer=None,parent=None):
         
         # Every QT app needs a QApplication
         self.app = QtGui.QApplication.instance()
@@ -41,7 +41,7 @@ class RenderWidget:
         else:
             self.renderer = renderer
             
-        self.widget = QVTKRenderWindowInteractor()
+        self.widget = QVTKRenderWindowInteractor(parent)
         
         self.widget.Initialize
         self.widget.Start()
