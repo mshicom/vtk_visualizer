@@ -189,7 +189,7 @@ class VTKObject:
         "Set up the VTK pipeline for visualizing a point cloud"
         
         self.mapper = vtk.vtkPolyDataMapper()
-        self.mapper.SetInput(self.pd)
+        self.mapper.SetInputData(self.pd)
 
         if (self.scalars != None):
             self.ScalarsOn()
