@@ -50,7 +50,7 @@ class VTKVisualizerControl:
         
         obj = VTKObject()
         obj.CreateFromArray(pc[:,:3])
-        obj.AddColors(pc[:,3:6])
+        obj.AddColors(pc[:,3:6].astype(np.uint8))
         self.pointObjects.append(obj)
         self.renderer.AddActor(obj.GetActor())
 

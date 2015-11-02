@@ -5,7 +5,7 @@ with open(os.path.join(os.path.dirname(__file__), "README.rst")) as f:
     long_description = f.read()
 
 setup(name = 'vtk_visualizer',
-      version = '0.9.2',
+      version = '0.9.3',
       author = "Oystein Skotheim",
       author_email = "oystein.skotheim@sintef.no",
       maintainer = 'Oystein Skotheim',
