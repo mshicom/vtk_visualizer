@@ -204,7 +204,7 @@ class VTKObject:
         "Set up the VTK pipeline for visualizing a mesh"
         
         self.mapper = vtk.vtkPolyDataMapper()
-        self.mapper.SetInput(self.pd)
+        self.mapper.SetInputData(self.pd)
         
         if self.scalars != None:
             if self.pd.GetPointData() != None:
@@ -230,7 +230,7 @@ class VTKObject:
         The surface normals are visualized as lines with the given scale"""
         
         hh = vtk.vtkHedgeHog()
-        hh.SetInput(self.pd)
+        hh.SetInputData(self.pd)
         hh.SetVectorModeToUseNormal()
         hh.SetScaleFactor(scale)
         hh.Update()
