@@ -2,14 +2,14 @@
 """
 Render widget for VTK based on Qt
 
-:Author: Øystein Skotheim, SINTEF ICT <oystein.skotheim@sintef.no>
+:Author: Øystein Skotheim, Zivid Labs <oystein.skotheim@zividlabs.com>
 """
 
 import vtk
 
 qt_api = 'pyqt'
 try:
-    from PyQt4 import QtGui, QtCore
+    from PyQt5.QtWidgets import *
 except:
     qt_api = 'pyside'
 
@@ -31,9 +31,9 @@ class RenderWidget:
     def __init__(self,renderer=None,parent=None):
         
         # Every QT app needs a QApplication
-        self.app = QtGui.QApplication.instance()
+        self.app = QApplication.instance()
         if self.app is None:
-            self.app = QtGui.QApplication(sys.argv)
+            self.app = QApplication(sys.argv)
         
         # Create the widget
         if renderer is None:
@@ -65,7 +65,7 @@ if __name__ == '__main__':
     cone.SetResolution(8)
 
     coneMapper = vtk.vtkPolyDataMapper()
-    coneMapper.SetInput(cone.GetOutput())
+    coneMapper.SetInputConnection(cone.GetOutputPort())
 
     coneActor = vtk.vtkActor()
     coneActor.SetMapper(coneMapper)

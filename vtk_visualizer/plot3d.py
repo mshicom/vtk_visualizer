@@ -95,10 +95,13 @@ if __name__ == '__main__':
     
     pc2 = pc1.copy()
     pc2[:,:,2] += 10.0
+    rgb = 255*np.random.rand(h,w,3)
+    
+    pc2 = np.dstack([pc2,rgb])
     
     pts1 = pc1.reshape(pc1.shape[0]*pc1.shape[1],pc1.shape[2])
     pts2 = pc2.reshape(pc2.shape[0]*pc2.shape[1],pc2.shape[2])
     
     plotxyz(pts1, 'r')
-    plotxyz(pts2, 'g', hold=True)
+    plotxyzrgb(pts2, hold=True)
     

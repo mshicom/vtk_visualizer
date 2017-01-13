@@ -284,7 +284,7 @@ class VTKVisualizerControl:
 if __name__ == '__main__':
 
     import sys
-    from python_qt_binding import QtGui
+    from PyQt5.QtWidgets import *
         
     vtkControl = VTKVisualizerControl()
     
@@ -300,9 +300,9 @@ if __name__ == '__main__':
     vtkControl.SetActorOpacity(nID, 0.5)
     
         
-    app = QtGui.QApplication.instance()
+    app = QApplication.instance()
     
     if app is None:
-        app = QtGui.QApplication(sys.argv)
+        app = QApplication(sys.argv)
 
     app.exec_()            
