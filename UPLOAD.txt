@@ -1,0 +1,13 @@
+Create the file %USERPROFILE%\.pypirc with the contents:
+
+[distutils]
+index-servers=pypi
+
+[pypi]
+repository = https://upload.pypi.org/legacy/
+username = [username on pypi]
+password = [password on pypi]
+
+Write:
+
+python setup.py sdist upload
