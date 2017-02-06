@@ -6,7 +6,7 @@ Helper functions for easy visualization of point clouds
    Date:   Thu Sep 12 15:50:40 2013
 """
 
-import visualizercontrol as vis
+import vtk_visualizer.visualizercontrol as vis
 
 g_vtk_control = None
 g_hold = False

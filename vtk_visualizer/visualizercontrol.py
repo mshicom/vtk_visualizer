@@ -9,8 +9,8 @@ Created on Fri Apr 08 12:01:56 2011
 """
 
 import vtk
-from renderwidget import RenderWidget
-from pointobject import *
+from vtk_visualizer.renderwidget import RenderWidget
+from vtk_visualizer.pointobject import *
                 
 class VTKVisualizerControl:
     "Class for easy visualization of point clouds and geometric primitives"
