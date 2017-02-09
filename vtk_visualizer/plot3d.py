@@ -46,7 +46,7 @@ def is_hold_enabled():
     global g_hold
     return g_hold
     
-def plotxyz(pts,color='g',hold=False):    
+def plotxyz(pts,color='g',hold=False, block=False):    
     """Plot a supplied point cloud (NumPy array of Nxd values where d>=3)
     
     An optional color may be given as a single character (rgbcmykw)
@@ -63,22 +63,28 @@ def plotxyz(pts,color='g',hold=False):
         nID = vtkControl.GetLastActorID()
         vtkControl.SetActorColor(nID, _char2color(color))
         vtkControl.Render()    
+    if block:
+        vtkControl.exec_()
     
-def plotxyzrgb(pts, hold=False):
+def plotxyzrgb(pts, hold=False, block=False):
     "Plot a supplied point cloud w/ color (NumPy array of Nx6 values)"
     vtkControl = get_vtk_control()
     if not (hold or is_hold_enabled()):
         vtkControl.RemoveAllActors()
     vtkControl.AddColoredPointCloudActor(pts)    
     vtkControl.Render()
+    if block:
+        vtkControl.exec_()
 
-def plothh(pts,scale=5.0, hold=False):
+def plothh(pts,scale=5.0, hold=False, block=False):
     "Plot hedge hog (points w/ normals) from given NumPy array of Nx6 values"
     vtkControl = get_vtk_control()    
     if not (hold or is_hold_enabled()):
         vtkControl.RemoveAllActors()    
     vtkControl.AddHedgeHogActor(pts,scale)
     vtkControl.Render()
+    if block:
+        vtkControl.exec_()
     
 if __name__ == '__main__':
 
@@ -104,4 +110,6 @@ if __name__ == '__main__':
     
     plotxyz(pts1, 'r')
     plotxyzrgb(pts2, hold=True)
+    import time
+    time.sleep(4)
     

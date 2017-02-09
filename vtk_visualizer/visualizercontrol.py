@@ -156,7 +156,11 @@ class VTKVisualizerControl:
     def Render(self):
         "Render all objects"
         self.renderWindow.Render()
-        
+
+    def exec_(self):
+        "run event loop"
+        return self.renderWidget.exec_()
+
     def GetNumberOfActors(self):
         "Get the number of actors added to visualizer"
         return len(self.pointObjects)
