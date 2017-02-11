@@ -57,6 +57,7 @@ class RenderWidget:
         self.widget.show()
         
     def exec_(self):
+        self.widget.show()  #make sure we are shown
         self.app.exec_()
                 
 if __name__ == '__main__':    

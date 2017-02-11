@@ -158,7 +158,7 @@ class VTKVisualizerControl:
         self.renderWindow.Render()
 
     def exec_(self):
-        "run event loop"
+        "Run event loop"
         return self.renderWidget.exec_()
 
     def GetNumberOfActors(self):
