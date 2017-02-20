@@ -27,11 +27,12 @@ def _char2color(c):
     global __colors
     return __colors[c]
 
-def get_vtk_control():
+
+def get_vtk_control(block):
     "Get the vtk control currently used by the plot3d functions"
     global g_vtk_control
     
-    if g_vtk_control is None:
+    if block or g_vtk_control is None:
         g_vtk_control = vis.VTKVisualizerControl()    
         
     return g_vtk_control
@@ -53,8 +54,9 @@ def plotxyz(pts,color='g',hold=False, block=False):
     An optional hold flag can be enabled to keep previously visualized data
     
     The supplied array may have an additional column with scalars, which
-    will be used to color the points (0=black, 1=white)"""
-    vtkControl = get_vtk_control()
+    will be used to color the points (0=black, 1=white)
+    """
+    vtkControl = get_vtk_control(block)
     if not (hold or is_hold_enabled()):
         vtkControl.RemoveAllActors()
     vtkControl.AddPointCloudActor(pts)
@@ -68,7 +70,7 @@ def plotxyz(pts,color='g',hold=False, block=False):
     
 def plotxyzrgb(pts, hold=False, block=False):
     "Plot a supplied point cloud w/ color (NumPy array of Nx6 values)"
-    vtkControl = get_vtk_control()
+    vtkControl = get_vtk_control(block)
     if not (hold or is_hold_enabled()):
         vtkControl.RemoveAllActors()
     vtkControl.AddColoredPointCloudActor(pts)    
@@ -78,7 +80,7 @@ def plotxyzrgb(pts, hold=False, block=False):
 
 def plothh(pts,scale=5.0, hold=False, block=False):
     "Plot hedge hog (points w/ normals) from given NumPy array of Nx6 values"
-    vtkControl = get_vtk_control()    
+    vtkControl = get_vtk_control(block)    
     if not (hold or is_hold_enabled()):
         vtkControl.RemoveAllActors()    
     vtkControl.AddHedgeHogActor(pts,scale)
