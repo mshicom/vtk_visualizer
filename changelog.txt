@@ -1,3 +1,8 @@
+0.9.6
+=====
+* Should now work with Python 3.6 (thanks to Olivier Roulet-Dubonnet)
+* Optimizations that make it much faster to visualize point clouds with color
+
 0.9.5
 =====
 * Changed to use PyQt5 instead of PyQt4

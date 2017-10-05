@@ -5,9 +5,9 @@ with open(os.path.join(os.path.dirname(__file__), "README.rst")) as f:
     long_description = f.read()
 
 setup(name = 'vtk_visualizer',
-      version = '0.9.5',
+      version = '0.9.6',
       author = "Oystein Skotheim",
-      author_email = "oystein.skotheim@sintef.no",
+      author_email = "oystein.skotheim@zividlabs.com",
       maintainer = 'Oystein Skotheim',
       url = 'https://bitbucket.org/oskotheim/vtk_visualizer',
       description = "Easy 3D visualization of point clouds and geometric primitives",  
