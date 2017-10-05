@@ -19,10 +19,10 @@ if qt_api == 'pyside':
     except:
         raise Exception('Need either PySide or PyQt4')
         
-# from vtk.qt4.QVTKRenderWindowInteractor import QVTKRenderWindowInteractor 
+#from vtk.qt.QVTKRenderWindowInteractor import QVTKRenderWindowInteractor 
 # Note: The QVTKRenderWindowInteractor included with VTK is buggy for PySide
 # Use our modified version instead
-from QVTKRenderWindowInteractor import QVTKRenderWindowInteractor 
+from vtk_visualizer.QVTKRenderWindowInteractor import QVTKRenderWindowInteractor 
 
 import sys
 
@@ -57,6 +57,7 @@ class RenderWidget:
         self.widget.show()
         
     def exec_(self):
+        self.widget.show()  #make sure we are shown
         self.app.exec_()
                 
 if __name__ == '__main__':    
