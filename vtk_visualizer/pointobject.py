@@ -174,14 +174,7 @@ class VTKObject:
         # - We need to take a copy to be sure the array is contigous                                
         self.colors_npy = cdata.copy().astype(np.uint8)     
         self.colors = numpy_support.numpy_to_vtk(self.colors_npy)
-            
-        self.colors = vtk.vtkUnsignedCharArray()
-        self.colors.SetNumberOfComponents(3)
-        self.colors.SetName("Colors")
-        
-        for i in range(nColors):
-            self.colors.InsertNextTupleValue(tuple(cdata[i,:]))
-            
+                        
         self.pd.GetPointData().SetScalars(self.colors)
         self.pd.Modified()
 
