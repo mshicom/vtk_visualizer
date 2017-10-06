@@ -35,6 +35,7 @@ try:
     from PyQt5.QtWidgets import QWidget
     from PyQt5.QtWidgets import QSizePolicy
     from PyQt5.QtWidgets import QApplication
+    from PyQt5.QtGui import QAction
     from PyQt5.QtCore import Qt
     from PyQt5.QtCore import pyqtSignal
     from PyQt5.QtCore import QTimer
@@ -142,6 +143,7 @@ class QVTKRenderWindowInteractor(QWidget):
         self.__saveY = 0
         self.__saveModifiers = Qt.NoModifier
         self.__saveButtons = Qt.NoButton
+		self.__fullScreenAction = QAction
 
         # do special handling of some keywords:
         # stereo, rw
@@ -159,7 +161,14 @@ class QVTKRenderWindowInteractor(QWidget):
 
         # create qt-level widget
         QWidget.__init__(self, parent, wflags|Qt.MSWindowsOwnDC)
-
+		
+		# Add full screen shortcut
+		self.__fullScreenAction.setShortcut(QKeySequence.FullScreen)
+		self.__fullScreenAction.setCheckable(true)
+		self.__fullScreenAction.setChecked(false)
+		self.__fullScreenAction.activated.connect(self.toggleFullScree)
+		QWidget.addAction(self, self.__fullScreenAction)
+		
         if rw: # user-supplied render window
             self._RenderWindow = rw
         else:
@@ -378,6 +387,11 @@ class QVTKRenderWindowInteractor(QWidget):
     def Render(self):
         self.update()
 
+	def toggleFullScree(self):
+		if self.__fullScreenAction.isChecked():
+			self.showFullScreen()
+		else:
+			self.showNormal()
 
 def QVTKRenderWidgetConeExample():
     """A simple example that uses the QVTKRenderWindowInteractor class."""
