@@ -35,6 +35,8 @@ try:
     from PyQt5.QtWidgets import QWidget
     from PyQt5.QtWidgets import QSizePolicy
     from PyQt5.QtWidgets import QApplication
+    from PyQt5.QtWidgets import QAction
+    from PyQt5.QtGui import QKeySequence
     from PyQt5.QtCore import Qt
     from PyQt5.QtCore import pyqtSignal
     from PyQt5.QtCore import QTimer
@@ -142,24 +144,32 @@ class QVTKRenderWindowInteractor(QWidget):
         self.__saveY = 0
         self.__saveModifiers = Qt.NoModifier
         self.__saveButtons = Qt.NoButton
+        self.__fullScreenAction = QAction(parent)
 
         # do special handling of some keywords:
         # stereo, rw
 
         stereo = 0
 
-        if kw.has_key('stereo'):
+        if 'stereo' in kw:
             if kw['stereo']:
                 stereo = 1
 
         rw = None
 
-        if kw.has_key('rw'):
+        if 'rw' in kw:
             rw = kw['rw']
 
         # create qt-level widget
         QWidget.__init__(self, parent, wflags|Qt.MSWindowsOwnDC)
-
+		
+        # Add full screen shortcut
+        self.__fullScreenAction.setShortcut(QKeySequence.FullScreen)
+        self.__fullScreenAction.setCheckable(True)
+        self.__fullScreenAction.setChecked(False)
+        self.__fullScreenAction.triggered.connect(self.toggleFullScreen)
+        QWidget.addAction(self, self.__fullScreenAction)
+		
         if rw: # user-supplied render window
             self._RenderWindow = rw
         else:
@@ -181,7 +191,7 @@ class QVTKRenderWindowInteractor(QWidget):
             self._RenderWindow.StereoCapableWindowOn()
             self._RenderWindow.SetStereoTypeToCrystalEyes()
 
-        if kw.has_key('iren'):
+        if 'iren' in kw:
             self._Iren = kw['iren']
         else:
             self._Iren = vtk.vtkGenericRenderWindowInteractor()
@@ -366,7 +376,8 @@ class QVTKRenderWindowInteractor(QWidget):
         self._Iren.KeyReleaseEvent()
 
     def wheelEvent(self, ev):
-        if ev.delta() >= 0:
+        angle = ev.angleDelta().y()
+        if angle >= 0:
             self._Iren.MouseWheelForwardEvent()
         else:
             self._Iren.MouseWheelBackwardEvent()
@@ -377,6 +388,11 @@ class QVTKRenderWindowInteractor(QWidget):
     def Render(self):
         self.update()
 
+    def toggleFullScreen(self):
+        if self.__fullScreenAction.isChecked():
+            self.showFullScreen()
+        else:
+            self.showNormal()
 
 def QVTKRenderWidgetConeExample():
     """A simple example that uses the QVTKRenderWindowInteractor class."""

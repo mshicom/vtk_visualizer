@@ -9,8 +9,8 @@ Created on Fri Apr 08 12:01:56 2011
 """
 
 import vtk
-from .renderwidget import RenderWidget
-from .pointobject import VTKObject
+from vtk_visualizer.renderwidget import RenderWidget
+from vtk_visualizer.pointobject import *
 import numpy as np
                 
 class VTKVisualizerControl:
@@ -168,7 +168,11 @@ class VTKVisualizerControl:
     def Render(self):
         "Render all objects"
         self.renderWindow.Render()
-        
+
+    def exec_(self):
+        "Run event loop"
+        return self.renderWidget.exec_()
+
     def GetNumberOfActors(self):
         "Get the number of actors added to visualizer"
         return len(self.pointObjects)
