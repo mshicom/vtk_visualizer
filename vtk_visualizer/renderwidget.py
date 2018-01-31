@@ -22,7 +22,7 @@ if qt_api == 'pyside':
 # from vtk.qt4.QVTKRenderWindowInteractor import QVTKRenderWindowInteractor 
 # Note: The QVTKRenderWindowInteractor included with VTK is buggy for PySide
 # Use our modified version instead
-from QVTKRenderWindowInteractor import QVTKRenderWindowInteractor 
+from .QVTKRenderWindowInteractor import QVTKRenderWindowInteractor 
 
 import sys
 

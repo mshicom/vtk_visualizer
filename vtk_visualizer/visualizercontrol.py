@@ -9,8 +9,9 @@ Created on Fri Apr 08 12:01:56 2011
 """
 
 import vtk
-from renderwidget import RenderWidget
-from pointobject import *
+from .renderwidget import RenderWidget
+from .pointobject import VTKObject
+import numpy as np
                 
 class VTKVisualizerControl:
     "Class for easy visualization of point clouds and geometric primitives"
