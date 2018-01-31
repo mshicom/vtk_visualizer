@@ -8,6 +8,8 @@ VTK visualization object
 import vtk
 from vtk.util import numpy_support
 import numpy as np
+from itertools import count
+
 
 class VTKObject:
     """VTK visualization object
@@ -235,7 +237,7 @@ class VTKObject:
         self.actor = vtk.vtkActor()
         self.actor.SetMapper(self.mapper)
         self.actor.GetProperty().SetColor(1,0,0) # Default color
-                
+                    
     def ScalarsOn(self):
         "Enable coloring of the points based on scalar array"
         self.mapper.ScalarVisibilityOn()
@@ -289,7 +291,7 @@ class VTKObject:
         axesActor.AxisLabelsOff()
         axesActor.SetTotalLength(length, length, length)        
         self.actor = axesActor
-        
+           
     def CreatePlane(self, normal=None, origin=None):
         "Create a plane (optionally with a given normal vector and origin)"
         plane = vtk.vtkPlaneSource()
@@ -325,6 +327,95 @@ class VTKObject:
         self.scalars = None
         self.SetupPipelineMesh()
         
+    def CreatePolyLine(self, points):
+        "Create a 3D line from Nx3 numpy array"
+        self.verts = vtk.vtkPoints()        
+        polyline = vtk.vtkPolyLine()
+        
+        polyline_pid = polyline.GetPointIds()
+        for i, p in enumerate(points):
+            self.verts.InsertNextPoint(*tuple(p))
+            polyline_pid.InsertNextId(i)
+        
+        polyline_cell = vtk.vtkCellArray()
+        polyline_cell.InsertNextCell(polyline)
+        
+        self.pd = vtk.vtkPolyData()
+        self.pd.SetPoints(self.verts)
+        self.pd.SetLines(polyline_cell)
+        
+        self.mapper = vtk.vtkPolyDataMapper()
+        self.mapper.SetInputData(self.pd)
+        self.actor = vtk.vtkActor()
+        self.actor.SetMapper(self.mapper)
+        self.actor.GetProperty().SetLineStipplePattern(0xf0f0)
+        self.actor.GetProperty().SetLineStippleRepeatFactor(1)
+        self.actor.GetProperty().SetLineWidth(1.5)
+        
+    def CreateAxesSimplified(self, length):
+        "Create a simplified coordinate axes system with 3 lines"  
+        points = vtk.vtkPoints()
+        lines = vtk.vtkCellArray()
+        colors = vtk.vtkUnsignedCharArray()
+        colors.SetNumberOfComponents(3)
+        colors.SetName("Colors")
+        
+        ptIds = [None, None]
+        end_points = length*np.eye(3)
+        line_colors =  255*np.eye(3,dtype='i')
+        for i in range(3):
+            ptIds[0] = points.InsertNextPoint( [0,0,0] )
+            ptIds[1] = points.InsertNextPoint( end_points[i] )
+            lines.InsertNextCell(2, ptIds)
+            
+            colors.InsertNextTuple3(*line_colors[i])
+            colors.InsertNextTuple3(*line_colors[i])
+        
+        # Add the lines to the polydata container
+        self.pd = vtk.vtkPolyData()
+        self.pd.SetPoints(points)
+        self.pd.GetPointData().SetScalars(colors)
+        self.pd.SetLines(lines)
+        
+    def AddPoses(self, matrix_list):
+        """"Add poses (4x4 NumPy arrays) to the object 
+        """
+        R_list = [p[:3,:3] for p in matrix_list] # translation data
+        t_list = [p[:3, 3] for p in matrix_list] # rotation data
+        
+        points  = vtk.vtkPoints()      # where t goes
+        tensors = vtk.vtkDoubleArray() # where R goes, column major
+        tensors.SetNumberOfComponents(9)
+        for i,R,t in zip(count(), R_list, t_list):
+            points.InsertNextPoint(*tuple(t))
+            tensors.InsertNextTypedTuple( tuple(R.ravel(order='F')) )
+
+        self.pose_pd = vtk.vtkPolyData()
+        self.pose_pd.SetPoints(points)
+        self.pose_pd.GetPointData().SetTensors(tensors)
+        
+    def SetupPipelinePose(self):
+        """Set up the VTK pipeline for visualizing multiple copies of a geometric 
+        representation with different poses"""
+        
+        # use vtkTensorGlyph set 3d pose for each actor instance  
+        tensorGlyph= vtk.vtkTensorGlyph()
+        tensorGlyph.SetInputData(self.pose_pd)  # setup with AddPoses()
+        tensorGlyph.SetSourceData(self.pd)
+        tensorGlyph.ColorGlyphsOff()
+        tensorGlyph.ThreeGlyphsOff()
+        tensorGlyph.ExtractEigenvaluesOff()
+        tensorGlyph.Update()
+        
+        # Set up mappers and actors 
+        self.mapper = vtk.vtkPolyDataMapper()
+        self.mapper.SetInputData(tensorGlyph.GetOutput())      
+        self.mapper.Update()
+        self.actor = vtk.vtkActor()
+        self.actor.GetProperty().SetLineWidth(1.5)
+        self.actor.SetMapper(self.mapper)        
+
+
 if __name__ == '__main__':
     
     # Create some random points

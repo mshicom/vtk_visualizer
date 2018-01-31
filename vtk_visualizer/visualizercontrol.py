@@ -10,7 +10,7 @@ Created on Fri Apr 08 12:01:56 2011
 
 import vtk
 from vtk_visualizer.renderwidget import RenderWidget
-from vtk_visualizer.pointobject import *
+from vtk_visualizer.pointobject import VTKObject
 import numpy as np
                 
 class VTKVisualizerControl:
@@ -152,6 +152,24 @@ class VTKVisualizerControl:
         self.pointObjects.append(obj)
         self.renderer.AddActor(obj.GetActor())
         return obj
+    
+    def AddTrajectoryActor(self, scale, pose_matrices):
+        "Add coordinate system axes with specified length"
+        obj = VTKObject()
+        obj.CreateAxesSimplified(scale)
+        obj.AddPoses(pose_matrices)
+        obj.SetupPipelinePose()
+        self.pointObjects.append(obj)
+        self.renderer.AddActor(obj.GetActor())
+        return obj   
+    
+    def AddPolyLineActor(self, points):
+        obj = VTKObject()
+        obj.CreatePolyLine(points)
+
+        self.pointObjects.append(obj)
+        self.renderer.AddActor(obj.GetActor())
+        return obj   
     
     def AddActor(self,actor):
         "Add a supplied vtkActor object to the visualizer"
