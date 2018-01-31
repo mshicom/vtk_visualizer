@@ -39,6 +39,7 @@ class VTKVisualizerControl:
         obj.CreateFromArray(pc)
         self.pointObjects.append(obj)
         self.renderer.AddActor(obj.GetActor())
+        return obj
 
     def AddColoredPointCloudActor(self, pc):    
         """Add a point cloud with colors from a given NumPy array
@@ -53,6 +54,7 @@ class VTKVisualizerControl:
         obj.AddColors(pc[:,3:6].astype(np.uint8))
         self.pointObjects.append(obj)
         self.renderer.AddActor(obj.GetActor())
+        return obj
 
     def AddShadedPointsActor(self, pc):    
         """Add a point cloud with shaded points based on supplied normal vectors
@@ -67,6 +69,7 @@ class VTKVisualizerControl:
         obj.AddNormals(pc[:,3:6])
         self.pointObjects.append(obj)
         self.renderer.AddActor(obj.GetActor())
+        return obj
 
     def AddPolyDataMeshActor(self,pd):
         "Add a supplied vtkPolyData object to the visualizer"
@@ -74,6 +77,7 @@ class VTKVisualizerControl:
         obj.CreateMeshFromPolyData(pd)
         self.pointObjects.append(obj)
         self.renderer.AddActor(obj.GetActor())
+        return obj
 
     def AddSTLActor(self,filename):
         "Load a mesh from an STL file and add it to the visualizer" 
@@ -81,6 +85,7 @@ class VTKVisualizerControl:
         obj.CreateFromSTL(filename)
         self.pointObjects.append(obj)
         self.renderer.AddActor(obj.GetActor())
+        return obj
 
     def AddPLYActor(self,filename):
         "Load a mesh from a PLY file and add it to the visualizer"         
@@ -88,6 +93,7 @@ class VTKVisualizerControl:
         obj.CreateFromPLY(filename)
         self.pointObjects.append(obj)
         self.renderer.AddActor(obj.GetActor())
+        return obj
         
     def AddNormalsActor(self,pc, scale):
         """Add a set of surface normals to the visualizer
@@ -103,6 +109,7 @@ class VTKVisualizerControl:
         obj.SetupPipelineHedgeHog(scale)
         self.pointObjects.append(obj)
         self.renderer.AddActor(obj.GetActor())
+        return obj
 
     def AddHedgeHogActor(self,pc, scale):        
         """Add shaded points with surface normals to the visualizer
@@ -112,13 +119,14 @@ class VTKVisualizerControl:
         
         The normals will be scaled according to given scale factor"""
         # Add the points
-        self.AddShadedPointsActor(pc)    
+        obj = self.AddShadedPointsActor(pc)    
         actor = self.GetLastActor()
         actor.GetProperty().SetColor(1,1,1)
         actor.GetProperty().SetPointSize(5.0)
         actor.GetProperty().SetInterpolation(True)
         # Add the normals
-        self.AddNormalsActor(pc, scale)        
+        self.AddNormalsActor(pc, scale)
+        return obj        
         
     def AddHedgeHogActorWithScalars(self,pc,scale):   
         """Add shaded points with surface normals and scalars to the visualizer
@@ -128,12 +136,13 @@ class VTKVisualizerControl:
         
         The normals will be scaled according to given scale factor"""
         # Add the points
-        self.AddPointCloudActor(pc[:,[0,1,2,-1]])    
+        obj = self.AddPointCloudActor(pc[:,[0,1,2,-1]])    
         actor = self.GetLastActor()
         actor.GetProperty().SetColor(1,1,1)
         actor.GetProperty().SetPointSize(5.0)
         # Add the normals
-        self.AddNormalsActor(pc,scale)  
+        self.AddNormalsActor(pc,scale)
+        return obj
         
     def AddAxesActor(self,length):
         "Add coordinate system axes with specified length"
@@ -141,6 +150,7 @@ class VTKVisualizerControl:
         obj.CreateAxes(length)
         self.pointObjects.append(obj)
         self.renderer.AddActor(obj.GetActor())
+        return obj
     
     def AddActor(self,actor):
         "Add a supplied vtkActor object to the visualizer"
@@ -148,6 +158,7 @@ class VTKVisualizerControl:
         obj.CreateFromActor(actor)
         self.pointObjects.append(obj)
         self.renderer.AddActor(obj.GetActor())
+        return obj
                         
     def ResetCamera(self):
         "Reset the camera to fit contents"
@@ -240,6 +251,7 @@ class VTKVisualizerControl:
         obj.CreateSphere(origin, r)
         self.pointObjects.append(obj)
         self.renderer.AddActor(obj.GetActor())
+        return obj
 
     def AddCylinder(self, origin, r, h):
         "Add a cylinder with given origin (x,y,z), radius r and height h"               
@@ -247,6 +259,7 @@ class VTKVisualizerControl:
         obj.CreateCylinder(origin, r, h)
         self.pointObjects.append(obj)
         self.renderer.AddActor(obj.GetActor())
+        return obj
                 
     def AddPlane(self,normal=None, origin=None):
         """Add a plane (optionally with a given normal vector and origin)
@@ -256,6 +269,7 @@ class VTKVisualizerControl:
         obj.CreatePlane(normal, origin)
         self.pointObjects.append(obj)
         self.renderer.AddActor(obj.GetActor())
+        return obj
 
     def AddBox(self,bounds):
         "Add a box witih the given bounds=[xmin,xmax,ymin,ymax,zmin,zmax]"        
@@ -263,6 +277,7 @@ class VTKVisualizerControl:
         obj.CreateBox(bounds)
         self.pointObjects.append(obj)
         self.renderer.AddActor(obj.GetActor())
+        return obj
         
     def AddLine(self,p1,p2):
         "Add a 3D line from p1=[x1,y1,z1] to p2=[x2,y2,z2]"
@@ -270,6 +285,7 @@ class VTKVisualizerControl:
         obj.CreateLine(p1,p2)
         self.pointObjects.append(obj)
         self.renderer.AddActor(obj.GetActor())
+        return obj
         
     # Helper functions    
     def _array2vtkTransform(self,arr):
