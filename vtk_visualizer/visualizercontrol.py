@@ -75,7 +75,7 @@ class VTKVisualizerControl:
     def AddPolyDataMeshActor(self,pd):
         "Add a supplied vtkPolyData object to the visualizer"
         obj = VTKObject()
-        obj.CreateMeshFromPolyData(pd)
+        obj.CreateFromPolyData(pd)
         self.pointObjects.append(obj)
         self.renderer.AddActor(obj.GetActor())
         return obj
@@ -162,6 +162,15 @@ class VTKVisualizerControl:
         self.pointObjects.append(obj)
         self.renderer.AddActor(obj.GetActor())
         return obj   
+    
+    def AddTrianglesActor(self, pc, triangles):
+        "Add coordinate system axes with specified length"
+        obj = VTKObject()
+        obj.CreateTriangles(pc, triangles)
+        obj.SetupPipelineMesh()
+        self.pointObjects.append(obj)
+        self.renderer.AddActor(obj.GetActor())
+        return obj 
     
     def AddPolyLineActor(self, points):
         obj = VTKObject()

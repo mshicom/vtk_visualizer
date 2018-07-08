@@ -326,6 +326,25 @@ class VTKObject:
         self.pd.DeepCopy(line.GetOutput())
         self.scalars = None
         self.SetupPipelineMesh()
+
+    def CreateTriangles(self, pc, triangles):
+        "Create a mesh from triangles"
+        
+        self.verts = vtk.vtkPoints()              
+        self.points_npy = pc[:,:3].copy()   
+        self.verts.SetData(numpy_support.numpy_to_vtk(self.points_npy))
+             
+        nTri = len(triangles)
+        self.cells = vtk.vtkCellArray()
+        self.pd = vtk.vtkPolyData()        
+        # - Note that the cell array looks like this: [3 vtx0 vtx1 vtx2 3 vtx3 ... ]
+        self.cells_npy = np.column_stack([np.full(nTri, 3, dtype=np.int64), triangles.astype(np.int64)]).ravel()
+        self.cells.SetCells(nTri, numpy_support.numpy_to_vtkIdTypeArray(self.cells_npy))
+
+        self.pd.SetPoints(self.verts)
+        self.pd.SetPolys(self.cells)
+
+        self.SetupPipelineMesh()
         
     def CreatePolyLine(self, points):
         "Create a 3D line from Nx3 numpy array"
