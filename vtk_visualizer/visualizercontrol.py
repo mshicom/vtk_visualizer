@@ -164,7 +164,10 @@ class VTKVisualizerControl:
         return obj   
     
     def AddTrianglesActor(self, pc, triangles):
-        "Add coordinate system axes with specified length"
+        """Add mesh consists of triangles
+        Example: 
+            viz.AddTrianglesActor(pc_3d, scipy.spatial.Delaunay(pc_2d).simplices)
+        """
         obj = VTKObject()
         obj.CreateTriangles(pc, triangles)
         obj.SetupPipelineMesh()
