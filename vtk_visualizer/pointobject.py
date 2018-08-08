@@ -417,22 +417,28 @@ class VTKObject:
         self.pd.GetPointData().SetScalars(colors)
         self.pd.SetLines(lines)
         
+        self.mapper = vtk.vtkPolyDataMapper()
+        self.mapper.SetInputData(self.pd)      
+        self.mapper.Update()
+        self.actor = vtk.vtkActor()
+        self.actor.SetMapper(self.mapper)  
+        
     def AddPoses(self, matrix_list):
         """"Add poses (4x4 NumPy arrays) to the object 
         """
         R_list = [p[:3,:3] for p in matrix_list] # translation data
         t_list = [p[:3, 3] for p in matrix_list] # rotation data
-        
-        points  = vtk.vtkPoints()      # where t goes
-        tensors = vtk.vtkDoubleArray() # where R goes, column major
-        tensors.SetNumberOfComponents(9)
+
+        self.points  = vtk.vtkPoints()      # where t goes
+        self.tensors = vtk.vtkDoubleArray() # where R goes, column major
+        self.tensors.SetNumberOfComponents(9)
         for i,R,t in zip(count(), R_list, t_list):
-            points.InsertNextPoint(*tuple(t))
-            tensors.InsertNextTypedTuple( tuple(R.ravel(order='F')) )
+            self.points.InsertNextPoint(*tuple(t))
+            self.tensors.InsertNextTypedTuple( tuple(R.ravel(order='F')) )
 
         self.pose_pd = vtk.vtkPolyData()
-        self.pose_pd.SetPoints(points)
-        self.pose_pd.GetPointData().SetTensors(tensors)
+        self.pose_pd.SetPoints(self.points)
+        self.pose_pd.GetPointData().SetTensors(self.tensors)
         
     def SetupPipelinePose(self):
         """Set up the VTK pipeline for visualizing multiple copies of a geometric 

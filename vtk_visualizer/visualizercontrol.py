@@ -153,7 +153,7 @@ class VTKVisualizerControl:
         self.renderer.AddActor(obj.GetActor())
         return obj
     
-    def AddTrajectoryActor(self, scale, pose_matrices):
+    def AddTrajectoryActor(self, pose_matrices, scale=1):
         "Add coordinate system axes with specified length"
         obj = VTKObject()
         obj.CreateAxesSimplified(scale)
@@ -175,13 +175,13 @@ class VTKVisualizerControl:
         self.renderer.AddActor(obj.GetActor())
         return obj 
     
-    def AddPolyLineActor(self, points):
+    def AddPolyLineActor(self, points, color=(255,255,255)):
         obj = VTKObject()
         obj.CreatePolyLine(points)
-
+        obj.actor.GetProperty().SetColor(*color)
         self.pointObjects.append(obj)
         self.renderer.AddActor(obj.GetActor())
-        return obj   
+        return obj  
     
     def AddPolygonActor(self, points, color=(255,255,255)):
         obj = VTKObject()
