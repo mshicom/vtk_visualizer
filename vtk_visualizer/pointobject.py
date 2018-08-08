@@ -371,6 +371,27 @@ class VTKObject:
         self.actor.GetProperty().SetLineStippleRepeatFactor(1)
         self.actor.GetProperty().SetLineWidth(1.5)
         
+    def CreatePolygon(self, points):
+        "Create a 3D plane from Nx3 numpy array"
+        self.verts = vtk.vtkPoints()        
+        polygon = vtk.vtkPolygon()
+        
+        polygon_pid = polygon.GetPointIds()
+        for i, p in enumerate(points):
+            self.verts.InsertNextPoint(*tuple(p))
+            polygon_pid.InsertNextId(i)
+        
+        polygon_cell = vtk.vtkCellArray()
+        polygon_cell.InsertNextCell(polygon)
+        
+        self.pd = vtk.vtkPolyData()
+        self.pd.SetPoints(self.verts)
+        self.pd.SetPolys(polygon_cell)
+        
+        self.mapper = vtk.vtkPolyDataMapper()
+        self.mapper.SetInputData(self.pd)
+        self.actor = vtk.vtkActor()
+        self.actor.SetMapper(self.mapper)        
     def CreateAxesSimplified(self, length):
         "Create a simplified coordinate axes system with 3 lines"  
         points = vtk.vtkPoints()

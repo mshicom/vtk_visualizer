@@ -183,6 +183,14 @@ class VTKVisualizerControl:
         self.renderer.AddActor(obj.GetActor())
         return obj   
     
+    def AddPolygonActor(self, points, color=(255,255,255)):
+        obj = VTKObject()
+        obj.CreatePolygon(points)
+        obj.actor.GetProperty().SetColor(*color)
+        self.pointObjects.append(obj)
+        self.renderer.AddActor(obj.GetActor())
+        return obj 
+    
     def AddActor(self,actor):
         "Add a supplied vtkActor object to the visualizer"
         obj = VTKObject()
